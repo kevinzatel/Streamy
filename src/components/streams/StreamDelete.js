@@ -1,19 +1,15 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteStream, getSelectedStream, unselectStream } from '../../actions';
+import { deleteStream, fetchStreams } from '../../actions';
 import history from '../../history';
 import Warning from '../messages/Warning';
 import Modal from '../Modal';
 
-const StreamDelete = ({ getSelectedStream, deleteStream, unselectStream, stream, match, account }) => {
+const StreamDelete = ({ deleteStream, stream, account, fetchStreams }) => {
 
     useEffect(() => {
-        getSelectedStream(match.params.id);
-
-        return () => {
-            unselectStream()
-        }
-    }, [])
+        fetchStreams();
+    }, [fetchStreams])
 
     const onDismiss = () => {
         history.push('/');
@@ -26,7 +22,7 @@ const StreamDelete = ({ getSelectedStream, deleteStream, unselectStream, stream,
         </>
     )
 
-    if (!stream) return <div>Loading...</div>
+    if (!stream) return <Warning title="The required stream does not exist." />
     if (!account.isSignedIn || account.userId !== stream.userId)
         return <Warning title="You are not abled to delete this stream becuase you are not logged as it's owner." />
 
@@ -40,8 +36,8 @@ const StreamDelete = ({ getSelectedStream, deleteStream, unselectStream, stream,
     )
 }
 
-const mapPropsToState = state => {
-    return { stream: state.selectedStream, account: state.auth }
+const mapPropsToState = (state, ownProps) => {
+    return { stream: state.streams.find(s => s.id.toString() === ownProps.match.params.id.toString()), account: state.auth }
 }
 
-export default connect(mapPropsToState, { getSelectedStream, deleteStream, unselectStream })(StreamDelete);
+export default connect(mapPropsToState, { deleteStream, fetchStreams })(StreamDelete);

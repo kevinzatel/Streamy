@@ -1,35 +1,32 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getSelectedStream, unselectStream } from '../../actions';
+import { fetchStreams } from '../../actions';
+import Warning from '../messages/Warning';
 
-const StreamShow = ({ match, getSelectedStream, unselectStream, stream }) => {
+const StreamShow = ({ stream, fetchStreams }) => {
 
     useEffect(() => {
-        getSelectedStream(match.params.id);
+        fetchStreams();
+    }, [fetchStreams])
 
-        return () => {
-            unselectStream();
-        }
-    }, [])
-
-    if (!stream) return <div>Loading</div>
+    if (!stream) return <Warning title="The required stream does not exist." />
     return (
         <div>
-            <div class="ui card container">
-                <div class="image">
-                    <img src="https://store-images.s-microsoft.com/image/apps.12246.13510798887394810.e8a09938-7296-4009-ac8e-66655a794ce2.d917a088-acc8-40e9-90c7-b1534013beb2?mode=scale&q=90&h=200&w=200&background=%230078D7" />
+            <div className="ui card container">
+                <div className="image">
+                    <img alt='video-player' src="https://store-images.s-microsoft.com/image/apps.12246.13510798887394810.e8a09938-7296-4009-ac8e-66655a794ce2.d917a088-acc8-40e9-90c7-b1534013beb2?mode=scale&q=90&h=200&w=200&background=%230078D7" />
                 </div>
-                <div class="content">
-                    <div class="header">{stream.title}</div>
-                    <div class="description">{stream.description}</div>
+                <div className="content">
+                    <div className="header">{stream.title}</div>
+                    <div className="description">{stream.description}</div>
                 </div>
             </div>
         </div>
     )
 }
 
-const mapStateToProps = state => {
-    return { stream: state.selectedStream }
+const mapStateToProps = (state, ownProps) => {
+    return { stream: state.streams.find(s => s.id.toString() === ownProps.match.params.id.toString()) }
 }
 
-export default connect(mapStateToProps, { getSelectedStream, unselectStream })(StreamShow);
+export default connect(mapStateToProps, { fetchStreams })(StreamShow);

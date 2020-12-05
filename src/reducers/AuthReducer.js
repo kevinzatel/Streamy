@@ -4,7 +4,7 @@ const INITIAL_STATE = {
     userId: null
 };
 
-export default (state = INITIAL_STATE, action) => {
+const AuthReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'INIT':
             return { ...state, auth: action.payload }
@@ -16,3 +16,5 @@ export default (state = INITIAL_STATE, action) => {
             return state
     }
 }
+
+export default AuthReducer;

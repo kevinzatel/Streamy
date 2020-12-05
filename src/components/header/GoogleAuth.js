@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { init, signIn, signOut } from '../../actions';
 
@@ -6,18 +6,18 @@ const GoogleAuth = ({ init, signIn, signOut, account }) => {
 
     useEffect(() => {
         init();
-    }, []);
+    }, [init]);
 
-    const onSignedInChange = isSignedIn => {
+    const onSignedInChange = useCallback(isSignedIn => {
         const userId = account.auth.currentUser.get().getId();
         isSignedIn ? signIn(userId) : signOut();
-    }
+    }, [signIn, signOut, account.auth])
 
     useEffect(() => {
         if (!account.auth) return;
         onSignedInChange(account.auth.isSignedIn.get())
         account.auth.isSignedIn.listen(onSignedInChange);
-    }, [account.auth])
+    }, [account.auth, onSignedInChange])
 
     const renderedSignIn = () => {
         return (

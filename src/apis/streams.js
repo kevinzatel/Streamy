@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'https://api.jsonbin.io/b/5fcab07e516f9d1270282b96',
+    baseURL: 'https://api.jsonbin.io/b/5fcb0f1c2946d2126ffe6217',
     headers: {
-        'secret-key': '$2b$10$AZbkvebds7gqLFr5gDz9vuCH7h.R20PcF8cEXDmQAdQZbZw2IXkHe'
+        'secret-key': '$2b$10$Zqq4nNKlSNN0Itp.lHO03OYu0G9Sjh6G7.ViB2ughee238k7Joun.'
     }
 });

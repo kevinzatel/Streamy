@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Warning = ({ title, content }) => (
-    <div class="ui warning message">
-        <div class="header">
+    <div className="ui warning message">
+        <div className="header">
             {title}
         </div>
         {content}

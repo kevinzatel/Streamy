@@ -2,8 +2,13 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchStreams } from '../../actions';
+import history from '../../history';
 
 const StreamList = ({ streams, fetchStreams, account }) => {
+
+    useEffect(() => {
+        fetchStreams();
+    }, [fetchStreams]);
 
     const renderCreateButton = () => {
         if (account.isSignedIn) {
@@ -14,8 +19,7 @@ const StreamList = ({ streams, fetchStreams, account }) => {
     const renderAdminButtons = (stream) => {
         if (stream.userId === account.userId) {
             return (
-                <div className='ui right floated'>
-
+                <div onClick={e => e.stopPropagation()} className='ui right floated'>
                     <Link to={`/streams/edit/${stream.id}`} className='ui button'>Edit</Link>
                     <Link to={`/streams/delete/${stream.id}`} className='ui button'>Delete</Link>
                 </div>
@@ -27,7 +31,7 @@ const StreamList = ({ streams, fetchStreams, account }) => {
         if (!streams) return;
         return streams.map(stream => {
             return (
-                <Link to={`/streams/${stream.id}`} className='item' key={stream.id}>
+                <div onClick={() => history.push(`/streams/${stream.id}`)} style={{ cursor: 'pointer' }} className='item' key={stream.id}>
                     <div className='ui clearing segment items'>
                         <div className='item'>
                             <i className='large icon camera' />
@@ -40,14 +44,10 @@ const StreamList = ({ streams, fetchStreams, account }) => {
                             {renderAdminButtons(stream)}
                         </div>
                     </div >
-                </Link>
+                </div>
             )
         });
     }
-
-    useEffect(() => {
-        fetchStreams();
-    }, []);
 
     return (
         <div>
@@ -61,7 +61,7 @@ const StreamList = ({ streams, fetchStreams, account }) => {
 }
 
 const mapStateToProps = (state) => {
-    return { streams: Object.values(state.streams), account: state.auth }
+    return { streams: state.streams, account: state.auth }
 }
 
 export default connect(mapStateToProps, { fetchStreams })(StreamList);

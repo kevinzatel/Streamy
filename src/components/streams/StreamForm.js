@@ -35,7 +35,7 @@ const StreamForm = ({ handleSubmit, onSubmit }) => {
             <form className='ui form' onSubmit={handleSubmit(onSubmit)}>
                 <Field name='title' component={renderInput} label='Enter title' />
                 <Field name='description' component={renderInput} label='Enter description' />
-                <button className='ui primary button'>Submit</button>
+                <button className='ui primary button right floated'>Submit</button>
             </form>
         </div>
     )
